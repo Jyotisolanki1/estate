@@ -36,10 +36,13 @@ try {
 
 export const google = async(req,res,next) =>{
 try {
+   console.log(req.body)
    const user = await User.findOne({email:req.body.email})
+   console.log(user)
    if(user){
       const token = jwt.sign({id: user._id},process.env.JWT_SECRET);
       const {password:pass,...rest} = user._doc;
+      console.log(rest)
       res.status(200)
       .json(rest)
       .cookie('access_token',token,{httpOnly: true})
@@ -49,7 +52,8 @@ try {
       const newUser = new User({
          username: req.body.username.split(" ").join("").toLowerCase()+ Math.random().toString(36).slice(-4),
          password: hashedPassword,
-         avatar : req.body.photo
+         avatar : req.body.photo,
+         email: req.body.email
       });
       await newUser.save();
       const token = jwt.sign({id:newUser._id},process.env.JWT_SECRET);
