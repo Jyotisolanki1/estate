@@ -1,5 +1,4 @@
-
-import { set } from 'mongoose';
+import OAuth from '../components/OAuth';
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -36,7 +35,7 @@ export default function SignUp() {
     });
      const data = await res.json();
      if(data.success === false){
-      seteError(data.message);
+      setError(data.message);
       setLoading(false);
       return
      }
@@ -60,7 +59,7 @@ export default function SignUp() {
        <input type='password' placeholder='enter your password' className='border p-3 rounded-lg' id='password' onChange={handleChange}/>
        <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>{loading?"loading..":"Sign Up"}</button>
      </form>
-
+      <OAuth />
      <div className='flex gap-2 mt-5'>
        <p>Having  an account?</p>
        <Link to='/sign-in'>
