@@ -1,19 +1,16 @@
-import React, { useDebugValue, useState } from 'react'
+import React, { useState } from 'react';
+import OAuth from '../components/OAuth';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import {  useDispatch, useSelector } from 'react-redux'; 
 import { signInFailure,signInSuccess,signInStart } from '../redux/user/userSlice';
 
 export default function SignIn() {
-  const [formData, setFormData] = useState({});
- 
-
-  const {error,loading} = useSelector((state)=> state.user)
+  const [formData, setFormData] = useState({}); 
+  const {error,loading} = useSelector((state)=> state.user);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-
 
   const handleChange =(e)=>{
     setFormData({
@@ -22,19 +19,19 @@ export default function SignIn() {
     })
   }
 
-
  const handleSubmit = async(e) =>{
   e.preventDefault();
   try {
-    dispatch(signInStart())
+    dispatch(signInStart());
+
     const res = await fetch('http://localhost:3000/api/auth/sign-in', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData),
-   
+      body: JSON.stringify(formData),   
     });
+    
      const data = await res.json();
      if(data.success === false){
       dispatch(signInFailure(data.message))
@@ -45,7 +42,6 @@ export default function SignIn() {
   } catch (error) {
    dispatch(signInFailure(error.message))
   }
- 
  }
  
 
@@ -58,8 +54,9 @@ export default function SignIn() {
        <input type='email' placeholder='enter your email' className='border p-3 rounded-lg' id='email' onChange={handleChange}/>
        <input type='password' placeholder='enter your password' className='border p-3 rounded-lg' id='password' onChange={handleChange}/>
        <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>{loading?"loading..":"Sign In"}</button>
-     </form>
-
+       <OAuth />
+       </form>
+     
      <div className='flex gap-2 mt-5'>
        <p>Don't have an account?</p>
        <Link to='/sign-up'>

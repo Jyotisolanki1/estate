@@ -14,6 +14,10 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         require: true
+    },
+    avatar:{
+        type:String,
+        default: "https://cdn.vectorstock.com/i/preview-lt/15/40/blank-profile-picture-image-holder-with-a-crown-vector-42411540.webp"
     }
 },
 {timestamps: true}
