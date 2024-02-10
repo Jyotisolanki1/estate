@@ -19,15 +19,20 @@ export const signUp = async(req,res,next) =>{
 
 
 export const signIn = async(req,res,next) =>{
+ 
 try {
    const {email,password}  = req.body;
    const isValidate = await User.findOne( { email } );
-   if (!isValidate) return next(errorHandler(404,"User not found")); //unauthorized status code
+   if (!isValidate) return next(errorHandler(404,"User not found"));
    const validPassword  = await bcryptjs.compare(password, isValidate.password)
    if(!validPassword) return next(errorHandler(401,"wrong credentials"));
-   const token = jwt.sign({id: isValidate._id },process.env.JWT_SECRET);
+   const token = await jwt.sign({id: isValidate._id },process.env.JWT_SECRET);
+   console.log(token)
    const {password: pass , ...rest} =  isValidate._doc;
-   res.cookie('access_token', token, { httpOnly: true }).status(200).json(rest)
+   console.log("before")
+    res.cookie('access_token', token, { httpOnly: true, sameSite: 'None', secure: true })
+   console.log("after")
+   res.status(200).json(rest)
 } catch (error) {
    next(error)
 }
@@ -45,7 +50,7 @@ try {
       console.log(rest)
       res.status(200)
       .json(rest)
-      .cookie('access_token',token,{httpOnly: true})
+      .cookie('access_token', token, { httpOnly: true, sameSite: 'None', secure: true });
    }else{
       const generatePass = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
       const hashedPassword = bcryptjs.hashSync(generatePass,10);
@@ -58,7 +63,7 @@ try {
       await newUser.save();
       const token = jwt.sign({id:newUser._id},process.env.JWT_SECRET);
       const {password: pass, ...rest} = newUser._doc;
-      res.cookie('access_token',token)
+      res.cookie('access_token', token, { httpOnly: true, sameSite: 'None', secure: true })
       .status(200)
       .json(rest)
    }

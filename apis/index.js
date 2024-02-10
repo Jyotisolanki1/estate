@@ -25,6 +25,18 @@ app.use(express.json());
 app.listen(3000, ()=>{
     console.log("your port is working on " + 3000)
 })
+app.get('/set-cookie', (req, res) => {
+    const token = 'your_token_value';
+    res.cookie('access_token', token, {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true,
+    });
+
+    // Sending a JSON response
+    res.json({ message: 'Cookie set successfully' });
+});
+
 
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);

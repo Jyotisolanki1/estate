@@ -5,6 +5,6 @@ import { varifyToken } from '../until/varifyUser.js';
 const router = express.Router();
 
 
-router.post('update/:id',varifyToken, updateUser);
+router.post('/update/:id',varifyToken, updateUser);
 
 export default router;
