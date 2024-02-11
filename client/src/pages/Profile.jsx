@@ -6,7 +6,7 @@ import { app } from '../firebase';
 import { 
   deleteUserFailure, deleteUserStart, deleteUserSuccess,
    updateUserFailure, updateUserStart, updateUserSuccess,
-  signOutStart,signOutSuccess,SignOutFailure } from '../redux/user/userSlice';
+  signOutStart,signOutSuccess,signOutFailure } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 
 export default function Profile() {
@@ -57,10 +57,11 @@ export default function Profile() {
     dispatch(deleteUserStart());
     const res = await fetch(`http://localhost:3000/api/user/delete/${currentUser._id}`,{
       method:'DELETE',
+      credentials: "include" 
     })
     const data = res.json();
     if(data.success === false){
-      deleteUserFailure(data.message);
+      dispatch(deleteUserFailure(data.message));
       return;
     }
     dispatch(deleteUserSuccess(data))
@@ -72,17 +73,18 @@ export default function Profile() {
   const handleSignout =async() =>{
     try {
      dispatch(signOutStart());
-     const res = await fetch(`http://localhost:3000/api/user/signout/${currentUser._id}`,{
-       method:'DELETE',
+     const res = await fetch('http://localhost:3000/api/auth/signout',{
+       method:'GET',
+       'credentials':'include'
      })
      const data = res.json();
      if(data.success === false){
-       SignOutFailure(data.message);
+      dispatch(signOutFailure(data.message));
        return;
      }
      dispatch(signOutSuccess(data))
     } catch (error) {
-     dispatch(SignOutFailure(error.message))
+     dispatch(signOutFailure(error.message))
     }
    }
 
