@@ -1,8 +1,11 @@
 import express from 'express';
-import { test } from '../controllers/userController.js'
+import { updateUser ,deleteUser} from '../controllers/userController.js'
+import { varifyToken } from '../until/varifyUser.js';
 
 const router = express.Router();
 
-router.get('/test', test)
+
+router.post('/update/:id',varifyToken, updateUser);
+router.delete('/delete/:id',varifyToken,deleteUser)
 
 export default router;
