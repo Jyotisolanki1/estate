@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useRef } from 'react';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
-import { updateUserFailure, updateUserStart, updateUserSuccess } from '../redux/user/userSlice';
+import { deleteUserFailure, deleteUserStart, deleteUserSuccess, updateUserFailure, updateUserStart, updateUserSuccess } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 
 export default function Profile() {
@@ -17,13 +17,11 @@ export default function Profile() {
   const { currentUser,loading,error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-
   useEffect(() => {
     if (file) {
       handleFileUpload(file)
     }
   }, [file]);
-
 
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
@@ -49,6 +47,22 @@ export default function Profile() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+  }
+
+  const handleDeleteUser =async() =>{
+   try {
+    dispatch(deleteUserStart());
+    const res = await fetch(`http://localhost:3000/api/user/delete/${currentUser._id}`,{
+      method:'DELETE',
+    })
+    const data = res.json();
+    if(data.success == false){
+      deleteUserFailure(data.message);
+    }
+    dispatch(deleteUserSuccess(data))
+   } catch (error) {
+    dispatch(deleteUserFailure(error.message))
+   }
   }
 
   const handleSubmit = async (e) => {
@@ -103,7 +117,7 @@ export default function Profile() {
           </button>
       </form>
       <div className='flex justify-between mt-5'>
-        <span className='text-red-700 cursor-pointer'>Delete Acount</span>
+        <span className='text-red-700 cursor-pointer' onClick={handleDeleteUser}>Delete Acount</span>
         <span className='text-red-700 cursor-pointer'>Sign out</span>
       </div>
       <p className='text-red-700 mt-4'>{error?error:""}</p>
