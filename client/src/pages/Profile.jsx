@@ -8,6 +8,7 @@ import {
    updateUserFailure, updateUserStart, updateUserSuccess,
   signOutStart,signOutSuccess,signOutFailure } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 export default function Profile() {
   const [file, setFile] = useState(null);
@@ -138,6 +139,7 @@ export default function Profile() {
           <button className='bg-slate-700 text-while rounded-lg disabled:opacity-80 p-3 uppercase' disabled={loading}>
           {loading? "loading....":"update"}
           </button>
+          <Link to='/create-listing' className='bg-green-700 text-white uppercase p-3 rounded-lg text-center hover:opacity-80'>create listing</Link>
       </form>
       <div className='flex justify-between mt-5'>
         <span className='text-red-700 cursor-pointer' onClick={handleDeleteUser}>Delete Acount</span>
