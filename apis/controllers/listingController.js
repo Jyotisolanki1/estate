@@ -37,21 +37,7 @@ export const updateListing = async (req, res, next) => {
     }
   
     try {
-      // const updateListing = await Listing.findByIdAndUpdate(req.params.id,{
-      //   $set:{
-      //     name: req.body.name,
-      //     description : req.body.description,
-      //     address: req.body.address,
-      //     regularPrice: req.body.regularPrice,
-      //     discountPrice: req.body.discountPrice,
-      //     bathrooms: req.body.bathrooms,
-      //     bedrooms: req.body.bedrooms,
-      //     furnished: req.body.furnished,
-      //     parking: req.body.parking,
-      //     type: req.body.type,
-      //     offer: req.body.offer,
-      //   }
-      // },{new : true})
+     
       const updatedListing = await Listing.findByIdAndUpdate(
         req.params.id,
         req.body,
